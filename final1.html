@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registration Form Design</title>
+  <style>
+    body {
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: 20px;
+    }
+    .circle {
+      width: 100px;
+      height: 100px;
+      border: 3px solid #1976d2;
+      border-radius: 50%;
+      margin-top: 20px;
+      background-color: #e3f2fd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      color: #1976d2;
+    }
+    .form-container {
+      border: 3px solid green;
+      width: 700px;
+      height: 1000px;
+      margin-top: 20px;
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+      background-color: #ffffff;
+    }
+    .left-side, .right-side {
+      width: 50%;
+      padding: 40px;
+      box-sizing: border-box;
+    }
+    .left-side {
+      background-color: #f9f9f9;
+      border-right: 2px solid steelblue;
+    }
+    .right-side {
+      background-color: #e8f0fe;
+    }
+    .bottom-section {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50%;
+      border-top: 2px solid steelblue;
+      height: 150px;
+      background-color: #dff0d8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 12px 24px;
+      background-color: green;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: darkgreen;
+    }
+    .gender-options {
+      display: flex;
+      gap: 5px;
+      margin-top: 5px;
+    }
+    .terms-condition {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #d9edf7;
+    }
+  </style>
+</head>
+<body>
+  <div class="circle">AIUB</div>
+  <div class="form-container">
+    <div class="left-side">
+      <h2>Register</h2>
+      <input id="full-name" type="text" placeholder="Full Name" required />
+      <input id="email" type="email" placeholder="Email Address" required />
+      <input id="password" type="password" placeholder="Password" required />
+      <input id="confirm-password" type="password" placeholder="Confirm Password" required />
+      <input id="dob" type="date" required />
+      <select id="country" required>
+        <option value="">Select Country</option>
+        <option value="USA">USA</option>
+        <option value="Canada">Canada</option>
+        <option value="UK">UK</option>
+        <option value="Bangladesh">Bangladesh</option>
+        <option value="India">India</option>
+        <option value="Australia">Australia</option>
+      </select>
+      <label for="color">Select Color</label>
+      <input type="color" id="color" />
+      <label for="gender">Select Gender</label><br />
+      <div class="gender-options">
+        <input type="radio" id="male" name="gender" value="Male" required /> Male
+        <input type="radio" id="female" name="gender" value="Female" /> Female
+        <input type="radio" id="other" name="gender" value="Other" /> Other
+      </div>
+      <div class="terms-condition">
+        <label for="terms-checkbox">I agree to the <a href="#">Terms and Conditions</a></label><br />
+        <input type="checkbox" id="terms-checkbox" required />
+      </div>
+    </div>
+    <div class="right-side" id="details-container">
+      <h2>Details</h2>
+      <!-- Table will appear here -->
+    </div>
+    <div class="bottom-section">
+      <button id="submit-btn">Submit</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('submit-btn').addEventListener('click', function () {
+      const fullName = document.getElementById('full-name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      const dobInput = document.getElementById('dob').value;
+      const dob = new Date(dobInput);
+      const country = document.getElementById('country').value;
+      const genderSelected = document.querySelector('input[name="gender"]:checked');
+      const color = document.getElementById('color').value;
+      const termsAccepted = document.getElementById('terms-checkbox').checked;
+
+      const namePattern = /^[A-Za-z\s]+$/;
+      if (fullName === "" || !namePattern.test(fullName)) {
+        alert("Please enter a valid full name (letters and spaces only).");
+        return;
+      }
+
+      const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      if (!email.match(emailPattern)) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      const passPattern = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+      if (!password.match(passPattern)) {
+        alert("Password must be at least 8 characters long and contain both letters and numbers.");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+        age--;
+      }
+      if (age < 18) {
+        alert("You must be at least 18 years old.");
+        return;
+      }
+
+      if (country === "") {
+        alert("Please select a country.");
+        return;
+      }
+
+      if (!genderSelected) {
+        alert("Please select your gender.");
+        return;
+      }
+
+      if (!termsAccepted) {
+        alert("You must agree to the Terms and Conditions.");
+        return;
+      }
+
+      const detailsContainer = document.getElementById('details-container');
+      detailsContainer.innerHTML = `
+        <h2>Details</h2>
+        <table>
+          <tr><th>Field</th><th>Value</th></tr>
+          <tr><td>Full Name</td><td>${fullName}</td></tr>
+          <tr><td>Email</td><td>${email}</td></tr>
+          <tr><td>Password</td><td>${password}</td></tr>
+          <tr><td>Date of Birth</td><td>${dob.toLocaleDateString()}</td></tr>
+          <tr><td>Country</td><td>${country}</td></tr>
+          <tr>
+            <td>Favorite Color</td>
+            <td><span style="display:inline-block;width:20px;height:20px;background-color:${color};border:1px solid #000;"></span> ${color}</td>
+          </tr>
+          <tr><td>Gender</td><td>${genderSelected.value}</td></tr>
+        </table>
+      `;
+    });
+  </script>
+</body>
+</html>
